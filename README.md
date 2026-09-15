@@ -59,3 +59,84 @@ The baseline uses:
 offline_duration_sec
 disconnection_cnt
 reboot_cnt
+### 2. Gateway-Relative Feature Engineering
+
+The solution uses gateway-relative behaviour to identify unusual changes in a gateway's own operating pattern.
+
+Instead of relying only on absolute telemetry values, the features are designed to capture how a gateway behaves relative to its historical behaviour.
+
+This helps reduce the effect of natural differences between gateways and focuses the anomaly detection process on unusual gateway-specific behaviour.
+
+### 3. Isolation Forest
+
+Isolation Forest is used as the machine learning anomaly detection method.
+
+The model is suitable for this problem because the challenge does not provide a simple binary failure label for every telemetry record.
+
+The model identifies observations that are unusual compared with the overall behaviour of the telemetry data.
+
+The resulting anomaly information is aggregated at gateway level and used for weekly ranking.
+
+### 4. Weekly Gateway Ranking
+
+The final objective is to produce a ranked list of gateways rather than simply classify individual telemetry rows.
+
+For each scored week, gateways are evaluated using their anomaly behaviour and ranked according to the resulting anomaly evidence.
+
+The top 15 gateways are selected as the gateways requiring the most attention.
+
+---
+
+## Why This Approach
+
+The approach was designed to improve on the limitations of using only absolute statistical thresholds.
+
+The 3-sigma baseline provides a simple and interpretable reference point.
+
+Gateway-relative features provide additional information about changes in individual gateway behaviour.
+
+Isolation Forest provides an unsupervised machine learning approach for detecting unusual observations when labelled failure data is not directly available.
+
+Combining these ideas allows the solution to retain the baseline as a reference while adding a machine learning based anomaly detection component.
+
+---
+
+## Limitations
+
+The model should be considered an anomaly-ranking system rather than a guaranteed failure prediction system.
+
+Important limitations include:
+
+- An anomaly does not necessarily mean that a gateway will fail.
+- Historical gateway behaviour may change over time.
+- Unusual behaviour may sometimes be caused by temporary or legitimate conditions.
+- The absence of a strong ground-truth failure label limits direct supervised learning.
+- A top-15 ranking does not guarantee that every selected gateway will require field intervention.
+
+---
+
+## What It Cannot Do
+
+The system cannot guarantee that every gateway ranked in the top 15 will experience a failure or require maintenance.
+
+It detects and ranks unusual behaviour based on the available telemetry data.
+
+It also cannot determine the exact physical cause of an anomaly without additional diagnostic information.
+
+The output should therefore be treated as a decision-support ranking for identifying gateways that may deserve further investigation.
+
+---
+
+## Project Structure
+
+```text
+nexora-ml-challenge/
+│
+├── README.md
+├── DECISIONS.md
+├── AI-USAGE.md
+├── baseline_3sigma.py
+├── validate_submission.py
+├── requirements.txt
+├── predictions_ml_v4_1.csv
+└── 23019A32J2.pdf
