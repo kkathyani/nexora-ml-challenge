@@ -140,3 +140,9 @@ nexora-ml-challenge/
 ├── requirements.txt
 ├── predictions_ml_v4_1.csv
 └── 23019A32J2.pdf
+## Screen Recording
+
+A 7-minute walkthrough of the Nexora ML Challenge project, covering the
+problem statement, machine learning approach, implementation, and validation.
+
+[Watch the project walkthrough](https://drive.google.com/file/d/1MIhX5w-nPO3XiRu4qvl4caCnTtfrtqXm/view?usp=sharing)
